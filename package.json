@@ -1,0 +1,38 @@
+{
+  "name": "songs-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node index.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.10"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "jest": "^25.4.0",
+    "mongodb-memory-server": "^6.5.2",
+    "nodemon": "^2.0.3",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "globalSetup": "./tests/setup.js",
+    "globalTeardown": "./tests/teardown.js",
+    "testEnvironment": "node"
+  }
+}

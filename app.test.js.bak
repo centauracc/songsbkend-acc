@@ -1,0 +1,143 @@
+const request = require("supertest");
+const app = require("./app");
+
+describe("App", () => {
+  test('GET / should respond with "Server is up and running"', async () => {
+    const { text } = await request(app).get("/").expect(200);
+    expect(text).toEqual("Server is up and running");
+  });
+
+  // Start of song
+
+  test("GET /songs should display an empty list of songs", async () => {
+    const { text } = await request(app).get("/songs").expect(200);
+    expect(text).toEqual("[]");
+  });
+
+  test("POST /songs should with a 400 bad request error if JSON is not sent", async () => {
+    const { text } = await request(app)
+      .post("/songs")
+      .send("notJson")
+      .expect(400);
+    expect(text).toEqual("Server wants application/json");
+  });
+
+  test("POST /songs should allow the adding of songs if JSON is sent", async () => {
+    const songToAdd = {
+      name: "song1",
+      artist: "artist1",
+    };
+
+    const { body: actualSong } = await request(app)
+      .post("/songs")
+      .send(songToAdd)
+      .expect(201);
+    expect(actualSong).toMatchObject(songToAdd);
+  });
+
+  test("GET /songs/1 should display the newly added song", async () => {
+    const newlyAddedSong = [
+      {
+        name: "song1",
+        artist: "artist1",
+      },
+    ];
+
+    const { body: actualSong } = await request(app).get("/songs/1").expect(200);
+    expect(actualSong).toMatchObject(newlyAddedSong);
+  });
+
+  test("PUT /songs/1 should update the name and artist of the song with the matching ID", async () => {
+    const updatedSong = {
+      name: "song111",
+      artist: "artist111",
+    };
+
+    const { body: actualSong } = await request(app)
+      .put("/songs/1")
+      .send(updatedSong)
+      .expect(200);
+    expect(actualSong).toMatchObject(updatedSong);
+  });
+
+  test("DELETE /songs/1 should delete the song with the matching ID", async () => {
+    const songToDelete = {
+      name: "song111",
+      artist: "artist111",
+    };
+
+    const { body: actualSong } = await request(app)
+      .delete("/songs/1")
+      .send("songToDelete")
+      .expect(200);
+    expect(actualSong).toMatchObject(songToDelete);
+  });
+
+  // End of song
+
+  // Start of movie
+
+  test("GET /movies should display an empty list of movies", async () => {
+    const { text } = await request(app).get("/movies").expect(200);
+    expect(text).toEqual("[]");
+  });
+
+  test("POST /movies should with a 400 bad request error if JSON is not sent", async () => {
+    const { text } = await request(app)
+      .post("/movies")
+      .send("notJson")
+      .expect(400);
+    expect(text).toEqual("Server wants application/json");
+  });
+
+  test("POST /movies should allow the adding of a movie if JSON is sent", async () => {
+    const movieToAdd = {
+      movieName: "movie1",
+    };
+
+    const { body: actualMovie } = await request(app)
+      .post("/movies")
+      .send(movieToAdd)
+      .expect(201);
+    expect(actualMovie).toMatchObject(movieToAdd);
+  });
+
+  test("GET /movies/1 should display the newly added movie", async () => {
+    const newlyAddedMovie = [
+      {
+        movieName: "movie1",
+      },
+    ];
+
+    const { body: actualMovie } = await request(app)
+      .get("/movies/1")
+      .expect(200);
+    expect(actualMovie).toMatchObject(newlyAddedMovie);
+  });
+
+  test("PUT /movies/1 should update the movie name of the movie with the matching ID", async () => {
+    const updatedMovie = {
+      movieName: "movie111",
+    };
+
+    const { body: actualMovie } = await request(app)
+      .put("/movies/1")
+      .send(updatedMovie)
+      .expect(200);
+    expect(actualMovie).toMatchObject(updatedMovie);
+  });
+
+  test("DELETE /movies/1 should delete the movie with the matching ID", async () => {
+    const movieToDelete = {
+      movieName: "movie111",
+    };
+
+    const { body: actualMovie } = await request(app)
+      .delete("/movies/1")
+      .send("movieToDelete")
+      .expect(200);
+    expect(actualMovie).toMatchObject(movieToDelete);
+  });
+
+  // End of movie
+});
