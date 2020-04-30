@@ -9,6 +9,6 @@ const setupMongoMemoryServer = async () => {
 };
 
 module.exports = async () => {
-  setupMongoMemoryServer();
+  await setupMongoMemoryServer();
   process.env.JWT_SECRET_KEY = "mock secret key";
 };

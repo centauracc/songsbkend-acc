@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 require("dotenv").config();
+require("./utils/db");
 
 app.use(express.json()); //required if you use req.body
 app.use(cookieParser("notagoodsecret"));

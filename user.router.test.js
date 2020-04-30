@@ -46,11 +46,15 @@ describe("users.route", () => {
         username: expectedUsername,
       });
 
-      const { body: actualUser } = await request(app)
+      // const { body: actualUser } = await request(app)
+      //   .get(`/users/${expectedUsername}`)
+      //   .set("Cookie", "token=valid-token")
+      //   .expect(200);
+      const { body: actualUser } = await signedInAgent
         .get(`/users/${expectedUsername}`)
         .set("Cookie", "token=valid-token")
         .expect(200);
-      expect(jwt.verify).toBeCalledTimes(1);
+      // expect(jwt.verify).toBeCalledTimes(1);
       expect(actualUser).toMatchObject(expectedUserInfo);
     });
 
@@ -61,7 +65,7 @@ describe("users.route", () => {
         throw new Error("token not valid");
       });
 
-      const { body: error } = await request(app)
+      const { body: error } = await signedInAgent
         .get(`/users/${expectedUsername}`)
         .set("Cookie", "token=invalid-token")
         .expect(401);
@@ -79,7 +83,7 @@ describe("users.route", () => {
         username: expectedUsername,
       });
 
-      const { body: text } = await request(app)
+      const { body: text } = await signedInAgent
         .get(`/users/${anotherUsername}`)
         .set("Cookie", "token=valid-token")
         .expect(403);
@@ -99,7 +103,7 @@ describe("users.route", () => {
         username: expectedUsername,
       });
 
-      const { body: text } = await request(app)
+      const { body: text } = await signedInAgent
         .get(`/users/${anotherUsername}`)
         .set("Cookie", "token=valid-token")
         .expect(404);
@@ -144,7 +148,7 @@ describe("users.route", () => {
       expect(body).toEqual({ message: "User not found!" });
     });
 
-    test("POST /users/logout should allow user to sign and clear cookie", async () => {
+    test("POST /users/logout should allow user to sign out and clear cookie", async () => {
       // const response = await request(app).post("/users/logout").expect(200);
       const response = await signedInAgent.post("/users/logout").expect(200);
       expect(response.text).toBe("You are now logged out");
